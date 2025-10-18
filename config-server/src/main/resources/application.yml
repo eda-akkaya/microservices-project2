@@ -9,5 +9,5 @@ spring:
           default-label: main
           search-paths:
             - configurations/
-            - configurations/ {applicaiton}
+            - configurations/{applicaiton}
 
