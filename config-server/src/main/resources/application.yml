@@ -11,3 +11,5 @@ spring:
             - configurations/
             - configurations/{applicaiton}
 
+server:
+  port: 8787
