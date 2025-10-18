@@ -5,9 +5,9 @@ spring:
     config:
       server:
         git:
-          uri:
-          default-label: master
+          uri: https://github.com/eda-akkaya/microservices-project2
+          default-label: main
           search-paths:
             - configurations/
             - configurations/ {applicaiton}
-            
+
