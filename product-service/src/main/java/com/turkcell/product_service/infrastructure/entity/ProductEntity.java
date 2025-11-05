@@ -3,6 +3,7 @@ package com.turkcell.product_service.infrastructure.entity;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import com.turkcell.product_service.domain.valueobject.Currency;
 
 @Entity
 @Table(name = "products")
@@ -22,7 +23,7 @@ public class ProductEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "price_currency", nullable = false, length = 3)
-    private String priceCurrency;
+    private Currency priceCurrency;
 
     @Column(name = "stock_quantity", nullable = false)
     private Integer stockQuantity;
@@ -34,11 +35,12 @@ public class ProductEntity {
     private LocalDateTime updatedAt;
 
     // Default constructor for JPA
-    public ProductEntity() {}
+    public ProductEntity() {
+    }
 
-    public ProductEntity(String id, String name, String description, BigDecimal priceAmount, 
-                        String priceCurrency, Integer stockQuantity, LocalDateTime createdAt, 
-                        LocalDateTime updatedAt) {
+    public ProductEntity(String id, String name, String description, BigDecimal priceAmount,
+            Currency priceCurrency, Integer stockQuantity, LocalDateTime createdAt,
+            LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -82,11 +84,11 @@ public class ProductEntity {
         this.priceAmount = priceAmount;
     }
 
-    public String getPriceCurrency() {
+    public Currency getPriceCurrency() {
         return priceCurrency;
     }
 
-    public void setPriceCurrency(String priceCurrency) {
+    public void setPriceCurrency(Currency priceCurrency) {
         this.priceCurrency = priceCurrency;
     }
 
@@ -114,9 +116,3 @@ public class ProductEntity {
         this.updatedAt = updatedAt;
     }
 }
-
-
-
-
-
-
