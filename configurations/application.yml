@@ -1,3 +1,4 @@
+# actuator'ın bütün endponitlerini dışarıya açmasını sağlar.
 management:
   endpoints:
     web:
