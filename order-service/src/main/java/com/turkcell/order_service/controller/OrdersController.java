@@ -29,7 +29,14 @@ public class OrdersController {
         Message<OrderCreatedEvent> message = MessageBuilder.withPayload(event).build();
         // kafka eventi fırlat
 
-        streamBridge.send("orderCreated-out-0", message);
+        try {
+            boolean isSent = streamBridge.send("orderCreated-out-0", message);
+            if (!isSent)
+                System.out.println("Mesaj gönderilemedi.");
+        } catch (Exception e) {
+            System.out.println("mesaj gönderilemedi.");
+        }
+
         return dto.productId;
     }
 
