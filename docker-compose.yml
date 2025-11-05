@@ -5,16 +5,22 @@ services:
       POSTGRES_DB: product_service
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: productservice_db_password
-    ports: 
+    ports:
       - "5432:5432"
     volumes:
       - productdb_vol:/var/lib/postgresql/data
-
-
-
+  ordersv_db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: order_service
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: orderservice_db_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - orderdb_vol:/var/lib/postgresql/data
   kafka:
     image: apache/kafka:3.8.0
-    container_name: kafka2
     restart: unless-stopped
     ports:
       - "9092:9092"   # container içi (PLAINTEXT) - diğer container'lar için
@@ -41,12 +47,12 @@ services:
       KAFKA_CLUSTER_ID: "5L6g3nShT-eMCtK--X86sw"
 
       KAFKA_LOG_DIRS: "/var/lib/kafka/data"
-
     volumes:
       - kafka-data:/var/lib/kafka/data
+    networks:
+      - kafkanet
   kafka-ui:
     image: provectuslabs/kafka-ui:v0.7.2
-    container_name: kafka-ui2
     restart: unless-stopped
     depends_on:
       - kafka
@@ -55,3 +61,46 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: "local"
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9092"
+    networks:
+      - kafkanet
+  keycloak_db:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      - kc_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U keycloak -d keycloak" ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.5
+    depends_on:
+      keycloak_db:
+        condition: service_healthy
+    command:
+      - start-dev
+      - --http-port=8585
+    ports:
+      - "8585:8585"
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak_db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+
+volumes:
+  productdb_vol: {}
+  kafka-data: {}
+  orderdb_vol: {}
+  kc_pg_data: {}
+
+networks:
+  kafkanet:
