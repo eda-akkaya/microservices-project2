@@ -1,6 +1,6 @@
 spring:
   kafka:
-    boostrap-servers: lovalhost:9092
+    bootstrap-servers: localhost:9092
   cloud:
     stream:
       kafka:
