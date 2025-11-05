@@ -1,6 +1,8 @@
 package com.turkcell.order_service.controller;
 
 import org.springframework.cloud.stream.function.StreamBridge;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,9 +21,15 @@ public class OrdersController {
 
     @PostMapping()
     public String createOrder(@RequestBody CreateOrderDto dto) {
-        // kafka eventi fırlat
         OrderCreatedEvent event = new OrderCreatedEvent(dto.productId());
-        streamBridge.send("orderCreated-out-0", event);
+        // event best-practice: hangi event olursa olsun Message generic yapısıyla
+        // sarmalla
+        // mesajı sarmallıyoruz: kafka'nın sahip lması gereken özel bilgileri (eventId,
+        // header) ekliyoruz.
+        Message<OrderCreatedEvent> message = MessageBuilder.withPayload(event).build();
+        // kafka eventi fırlat
+
+        streamBridge.send("orderCreated-out-0", message);
         return dto.productId;
     }
 
