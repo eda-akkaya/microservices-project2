@@ -6,7 +6,7 @@ spring:
       client:
         provider:
           keycloak:
-            issuer-uri: http://localhost:8585/realm/turkcell-p1-dev
+            issuer-uri: http://localhost:8585/realms/turkcell-p1-dev
             user-name-attribute: preferred_username
         registration:
           keycloak:
