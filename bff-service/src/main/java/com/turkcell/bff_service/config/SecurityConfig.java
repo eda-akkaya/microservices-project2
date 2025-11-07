@@ -9,7 +9,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
 @EnableWebFluxSecurity
-// araştırma ödevi : Spring Web / Spring Reactive Web farkları
+// araştır: Spring Web / Spring Reactive Web farkları
 public class SecurityConfig {
 
     @Bean
