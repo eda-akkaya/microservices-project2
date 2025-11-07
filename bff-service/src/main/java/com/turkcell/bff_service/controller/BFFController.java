@@ -21,7 +21,7 @@ public class BFFController {
                                                                                   // içini doldur
         return Mono.just(
                 Map.of(
-                        "username", user.getPrefferedUserName(),
+                        "username", user.getPreferredUsername(),
                         "email", user.getEmail(),
                         "authorities", user.getAuthorities()));
     }
